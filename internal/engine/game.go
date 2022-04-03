@@ -10,6 +10,8 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hararudoka/game_of_life/internal/logic"
 	"golang.org/x/image/math/f64"
+
+	_ "image/png"
 )
 
 type Game struct {
