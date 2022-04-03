@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"image"
-	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -22,17 +21,18 @@ type Game struct {
 	ScreenHeight int
 }
 
-func NewGame(worldWidth, worldHeight int) *Game {
+func NewGame(worldWidth, worldHeight int) (*Game, error) {
 	b64 := "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
 	// base64 to image
 	b, err := base64.StdEncoding.DecodeString(b64)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
+
 	img, _, err := image.Decode(bytes.NewReader(b))
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	return &Game{
@@ -42,7 +42,7 @@ func NewGame(worldWidth, worldHeight int) *Game {
 		tilesImage:   ebiten.NewImageFromImage(img),
 		ScreenWidth:  worldWidth,
 		ScreenHeight: worldHeight,
-	}
+	}, nil
 }
 
 func (g *Game) Update() error {

@@ -23,6 +23,7 @@ func NewMap() Map {
 	m = append(m, Cell{X: 1, Y: 1})
 	m = append(m, Cell{X: 2, Y: 1})
 	m = append(m, Cell{X: 0, Y: 2})
+
 	return m
 }
 
