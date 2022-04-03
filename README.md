@@ -7,7 +7,9 @@ I use Ebiten as game engine. Logic of Game of Life I implemented in Go by myself
 ## Features
 
 - [x] Game of Life Logic and cool moving cell creature.
-- [ ] Comfortable to click and drag to place cell.
+- [ ] Comfortable to place cells by pointer.
 - [ ] Pause, Play, Restart buttons and Speed control.
 
 ## Usage
+
+Clone repo, run `go run cmd/game/main.go` and enjoy.
