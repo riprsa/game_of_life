@@ -1,0 +1,8 @@
+screen_width: 800
+screen_height: 600
+
+to_keep_alive:
+- 2
+- 3
+to_become_alive:
+- 3

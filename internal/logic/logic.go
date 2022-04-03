@@ -4,33 +4,50 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+func init() {
+}
+
 // Cell is a struct that contains the x and y cordinates of a cell.
 type Cell struct {
 	X int
 	Y int
 }
 
-// Map is a 2D array of cells that are true. All other cells are false so we don't need to store them.
-type Map []Cell
+type Cells []Cell
+
+type Map struct {
+	// Cells is a 2D array of cells that are true. All other cells are false so we don't need to store them.
+	Cells Cells
+
+	// ToKeepAlive is a slice of ints that are the number of neighbors that a cell must have to stay alive.
+	ToKeepAlive []int
+
+	// ToBecomeAlive is a slice of ints that are the number of neighbors that a cell must have to become alive.
+	ToBecomeAlive []int
+}
 
 // NewMap returns a new map of cells.
-func NewMap() Map {
-	m := make(Map, 0)
+func NewMap(toKeepAlive, toBecomeAlive []int) Map {
+	c := make(Cells, 0)
 
 	// rn i dont have time to rewrite this to normal input or ingame clicks, so i will just hardcode it.
-	m = append(m, Cell{X: 0, Y: 0})
-	m = append(m, Cell{X: 1, Y: 0})
-	m = append(m, Cell{X: 1, Y: 1})
-	m = append(m, Cell{X: 2, Y: 1})
-	m = append(m, Cell{X: 0, Y: 2})
+	c = append(c, Cell{X: 0, Y: 0})
+	c = append(c, Cell{X: 1, Y: 0})
+	c = append(c, Cell{X: 1, Y: 1})
+	c = append(c, Cell{X: 2, Y: 1})
+	c = append(c, Cell{X: 0, Y: 2})
 
-	return m
+	return Map{
+		Cells:         c,
+		ToKeepAlive:   toKeepAlive,
+		ToBecomeAlive: toBecomeAlive,
+	}
 }
 
 // GetLivingNeighbors returns a slice of cells that are adjacent to the cell passed in.
-func (m Map) GetLivingNeighbors(c Cell) []Cell {
+func (cs Cells) GetLivingNeighbors(c Cell) []Cell {
 	var neighbors []Cell
-	for _, cell := range m {
+	for _, cell := range cs {
 		switch {
 		case cell.X == c.X+1 && cell.Y == c.Y:
 			neighbors = append(neighbors, cell)
@@ -54,7 +71,7 @@ func (m Map) GetLivingNeighbors(c Cell) []Cell {
 }
 
 // GetDeadNeighbors returns a slice of cells that are adjacent to the cell passed in and not in Map.
-func (m Map) GetDeadNeighbors(c Cell) []Cell {
+func (cs Cells) GetDeadNeighbors(c Cell) []Cell {
 	// All neighbors of the cell.
 	neighbors := []Cell{
 		{X: c.X + 1, Y: c.Y},
@@ -71,7 +88,7 @@ func (m Map) GetDeadNeighbors(c Cell) []Cell {
 	var сandidates []Cell
 
 	for _, neighbor := range neighbors {
-		if slices.Index(m, neighbor) == -1 {
+		if slices.Index(cs, neighbor) == -1 {
 			сandidates = append(сandidates, neighbor)
 		}
 	}
@@ -79,20 +96,20 @@ func (m Map) GetDeadNeighbors(c Cell) []Cell {
 }
 
 // RemoveDubles removes duplicates from a Map.
-func (m *Map) RemoveDuplicates() {
-	var uniqueMap Map
+func (cs *Cells) RemoveDuplicates() {
+	var uniqueMap Cells
 	u := make(map[Cell]struct{})
-	for _, c := range *m {
+	for _, c := range *cs {
 		u[c] = struct{}{}
 	}
 	for k := range u {
 		uniqueMap = append(uniqueMap, k)
 	}
-	*m = uniqueMap
+	*cs = uniqueMap
 }
 
 // DeleteCell removes a cell from the map.
-func (m *Map) DeleteCell(c Cell) {
+func (m *Cells) DeleteCell(c Cell) {
 	for i, cell := range *m {
 		if cell.X == c.X && cell.Y == c.Y {
 			*m = append((*m)[:i], (*m)[i+1:]...)
@@ -103,26 +120,26 @@ func (m *Map) DeleteCell(c Cell) {
 
 // UpdateMap changes the map for one showing.
 func (m *Map) UpdateMap() {
-	var livesMap Map
+	var livesMap Cells
 
-	for _, c := range *m {
-		neighbors := m.GetLivingNeighbors(c)
+	for _, c := range *&m.Cells {
+		// neighbors := m.Cells.GetLivingNeighbors(c)
 
 		// checks should the cell die.
-		if len(neighbors) == 2 || len(neighbors) == 3 {
+		if slices.Contains(m.ToKeepAlive, len(m.Cells.GetLivingNeighbors(c))) {
 			livesMap = append(livesMap, c)
 		}
 
 		// neighborsCandidates ARE NOT in Map.
-		neighborsCandidates := m.GetDeadNeighbors(c)
+		neighborsCandidates := m.Cells.GetDeadNeighbors(c)
 
 		for _, neighbor := range neighborsCandidates {
-			if len(m.GetLivingNeighbors(neighbor)) == 3 {
+			if slices.Contains(m.ToBecomeAlive, len(m.Cells.GetLivingNeighbors(neighbor))) {
 				livesMap = append(livesMap, neighbor)
 			}
 		}
 	}
 	livesMap.RemoveDuplicates()
 
-	*m = livesMap
+	*&m.Cells = livesMap
 }
