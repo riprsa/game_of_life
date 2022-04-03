@@ -11,5 +11,3 @@ I use Ebiten as game engine. Logic of Game of Life I implemented in Go by myself
 - [ ] Pause, Play, Restart buttons and Speed control.
 
 ## Usage
-
-
