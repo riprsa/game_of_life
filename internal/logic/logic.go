@@ -1,4 +1,4 @@
-package engine
+package logic
 
 import (
 	"golang.org/x/exp/slices"
@@ -26,8 +26,8 @@ func NewMap() Map {
 	return m
 }
 
-// GetNeighborsFromMap returns a slice of cells that are adjacent to the cell passed in.
-func (m Map) GetNeighborsFromMap(c Cell) []Cell {
+// GetLivingNeighbors returns a slice of cells that are adjacent to the cell passed in.
+func (m Map) GetLivingNeighbors(c Cell) []Cell {
 	var neighbors []Cell
 	for _, cell := range m {
 		switch {
@@ -52,9 +52,9 @@ func (m Map) GetNeighborsFromMap(c Cell) []Cell {
 	return neighbors
 }
 
-// GetCandidateNeighbors returns a slice of cells that are adjacent to the cell passed in and not in Map.
-func (m Map) GetCandidateNeighbors(c Cell) []Cell {
-	// ALL neighbors of the cell.
+// GetDeadNeighbors returns a slice of cells that are adjacent to the cell passed in and not in Map.
+func (m Map) GetDeadNeighbors(c Cell) []Cell {
+	// All neighbors of the cell.
 	neighbors := []Cell{
 		{X: c.X + 1, Y: c.Y},
 		{X: c.X - 1, Y: c.Y},
@@ -66,7 +66,7 @@ func (m Map) GetCandidateNeighbors(c Cell) []Cell {
 		{X: c.X - 1, Y: c.Y + 1},
 	}
 
-	// LiveCandidates are the neighbors that MAY BE alive. So it is slice of candidates.
+	// сandidates are the neighbors that are dead now.
 	var сandidates []Cell
 
 	for _, neighbor := range neighbors {
@@ -74,7 +74,6 @@ func (m Map) GetCandidateNeighbors(c Cell) []Cell {
 			сandidates = append(сandidates, neighbor)
 		}
 	}
-
 	return сandidates
 }
 
@@ -106,7 +105,7 @@ func (m *Map) UpdateMap() {
 	var livesMap Map
 
 	for _, c := range *m {
-		neighbors := m.GetNeighborsFromMap(c)
+		neighbors := m.GetLivingNeighbors(c)
 
 		// checks should the cell die.
 		if len(neighbors) == 2 || len(neighbors) == 3 {
@@ -114,10 +113,10 @@ func (m *Map) UpdateMap() {
 		}
 
 		// neighborsCandidates ARE NOT in Map.
-		neighborsCandidates := m.GetCandidateNeighbors(c)
+		neighborsCandidates := m.GetDeadNeighbors(c)
 
 		for _, neighbor := range neighborsCandidates {
-			if len(m.GetNeighborsFromMap(neighbor)) == 3 {
+			if len(m.GetLivingNeighbors(neighbor)) == 3 {
 				livesMap = append(livesMap, neighbor)
 			}
 		}
