@@ -109,31 +109,30 @@ func (cs *Cells) RemoveDuplicates() {
 }
 
 // DeleteCell removes a cell from the map.
-func (m *Cells) DeleteCell(c Cell) {
-	for i, cell := range *m {
-		if cell.X == c.X && cell.Y == c.Y {
-			*m = append((*m)[:i], (*m)[i+1:]...)
-			return
-		}
-	}
-}
+// func (cs *Cells) DeleteCell(c Cell) {
+// 	for i, cell := range *cs {
+// 		if cell.X == c.X && cell.Y == c.Y {
+// 			*cs = append((*cs)[:i], (*cs)[i+1:]...)
+// 			return
+// 		}
+// 	}
+// }
 
 // UpdateMap changes the map for one showing.
 func (m *Map) UpdateMap() {
 	var livesMap Cells
 
 	for _, c := range *&m.Cells {
-		// neighbors := m.Cells.GetLivingNeighbors(c)
-
-		// checks should the cell die.
+		// checks should c be alive or dead.
 		if slices.Contains(m.ToKeepAlive, len(m.Cells.GetLivingNeighbors(c))) {
 			livesMap = append(livesMap, c)
 		}
 
-		// neighborsCandidates ARE NOT in Map.
+		// neighborsCandidates is the dead neighbors of c.
 		neighborsCandidates := m.Cells.GetDeadNeighbors(c)
 
 		for _, neighbor := range neighborsCandidates {
+			// checks should neighbor become alive or still be dead.
 			if slices.Contains(m.ToBecomeAlive, len(m.Cells.GetLivingNeighbors(neighbor))) {
 				livesMap = append(livesMap, neighbor)
 			}
