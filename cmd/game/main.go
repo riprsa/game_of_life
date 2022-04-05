@@ -12,7 +12,7 @@ import (
 // TODO:
 // - game interface with comfort buttons
 // - features like play, pause, speed up, slow down, etc.
-// - fix lags with more than 2K-6K cells
+// - fix lags with more than 2K-6K cells: I can change map storage methond to a 2D array of cells.
 
 func main() {
 	cfg, err := config.LoadConfig("config.yaml")

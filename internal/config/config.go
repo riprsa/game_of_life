@@ -12,6 +12,8 @@ type Config struct {
 
 	ToKeepAlive   []int `yaml:"to_keep_alive"`
 	ToBecomeAlive []int `yaml:"to_become_alive"`
+
+	TPS int `yaml:"TPS"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
