@@ -9,6 +9,7 @@ I use Ebiten as game engine. Logic of Game of Life I implemented in Go by myself
 - [x] Game of Life logic.
 - [x] Primitive cell editor by mouse.
 - [x] Pause, Play, Restart buttons and Speed control.
+- [ ] Cool GUI
 
 ## Usage
 

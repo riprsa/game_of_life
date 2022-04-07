@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -13,13 +12,6 @@ type Camera struct {
 	Position   f64.Vec2
 	ZoomFactor int
 	Rotation   int
-}
-
-func (c *Camera) String() string {
-	return fmt.Sprintf(
-		"T: %.1f, R: %d, S: %d",
-		c.Position, c.Rotation, c.ZoomFactor,
-	)
 }
 
 func (c *Camera) viewportCenter() f64.Vec2 {
@@ -38,7 +30,6 @@ func (c *Camera) worldMatrix() ebiten.GeoM {
 		math.Pow(1.01, float64(c.ZoomFactor)),
 		math.Pow(1.01, float64(c.ZoomFactor)),
 	)
-	m.Rotate(float64(c.Rotation) * 2 * math.Pi / 360)
 	m.Translate(c.viewportCenter()[0], c.viewportCenter()[1])
 	return m
 }
@@ -63,6 +54,5 @@ func (c *Camera) ScreenToWorld(posX, posY int) (float64, float64) {
 func (c *Camera) Reset() {
 	c.Position[0] = 0
 	c.Position[1] = 0
-	c.Rotation = 0
 	c.ZoomFactor = 0
 }

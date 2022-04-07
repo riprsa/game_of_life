@@ -9,20 +9,20 @@ type Scene struct {
 	// Map is a 2D array of cells that are true. All other cells are false so we don't need to store them.
 	Map Map
 
-	// LivingCells is the living cells.
+	// LivingCells is map with all living cell. We use it fot logic and rendering.
 	LivingCells map[Cord]struct{}
 
-	// ToKeepAlive is a slice of ints that are the number of neighbors that a cell must have to stay alive.
+	// ToKeepAlive is a slice of the numbers of neighbors that a cell must have to stay alive.
 	ToKeepAlive []int
 
-	// ToBecomeAlive is a slice of ints that are the number of neighbors that a cell must have to become alive.
+	// ToBecomeAlive is a slice of the numbers of neighbors that a cell must have to become alive.
 	ToBecomeAlive []int
 
 	IsPaused bool
 
+	// Speed controls number of loops in tick.
 	Speed int
 
-	Tick int
 	tick int
 }
 
@@ -79,18 +79,5 @@ func (s *Scene) UpdateScene() {
 
 	s.LivingCells = newLivingCells
 
-	s.Tick++
 	s.Map = newMap
 }
-
-// func RemoveDuplicates(s []Cord) []Cord {
-// 	allKeys := make(map[Cord]bool)
-// 	list := []Cord{}
-// 	for _, item := range s {
-// 		if _, value := allKeys[item]; !value {
-// 			allKeys[item] = true
-// 			list = append(list, item)
-// 		}
-// 	}
-// 	return list
-// }

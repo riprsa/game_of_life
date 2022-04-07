@@ -54,13 +54,17 @@ func (g *Game) cameraControl() {
 		g.Camera.Position[1] += 3
 	}
 
+	_, y := ebiten.Wheel()
 	// zoom
-	if ebiten.IsKeyPressed(ebiten.KeyQ) {
-		g.Camera.ZoomFactor -= 7
+	if y < 0 || ebiten.IsKeyPressed(ebiten.KeyQ) {
+		if g.Camera.ZoomFactor > -15 {
+			g.Camera.ZoomFactor += int(y - 1)
+		}
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyE) {
-		if g.Camera.ZoomFactor < 2400 {
-			g.Camera.ZoomFactor += 7
+
+	if y > 0 || ebiten.IsKeyPressed(ebiten.KeyE) {
+		if g.Camera.ZoomFactor < 300 {
+			g.Camera.ZoomFactor += int(y + 1)
 		}
 	}
 }

@@ -2,6 +2,7 @@ package engine
 
 import (
 	"fmt"
+	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -25,12 +26,12 @@ type Game struct {
 }
 
 func NewGame(cfg config.Config) (*Game, error) {
-	liveCell, err := loadImage("white_1x1.png")
+	liveCell, err := loadImage("black_1x1.png")
 	if err != nil {
 		return nil, err
 	}
 
-	deadCell, err := loadImage("black_1x1.png")
+	deadCell, err := loadImage("white_1x1.png")
 	if err != nil {
 		return nil, err
 	}
@@ -41,10 +42,14 @@ func NewGame(cfg config.Config) (*Game, error) {
 
 	m := logic.NewScene(cfg)
 
+	// size of world
+	w := ebiten.NewImage(cfg.MapSize, cfg.MapSize)
+	w.Fill(color.White)
+
 	return &Game{
-		Camera:         Camera{ViewPort: f64.Vec2{float64(cfg.ScreenWidth), float64(cfg.ScreenHeight)}, ZoomFactor: 150},
+		Camera:         Camera{ViewPort: f64.Vec2{float64(cfg.ScreenWidth / 2), float64(cfg.ScreenHeight / 2)}, ZoomFactor: 150},
 		Scene:          m,
-		world:          ebiten.NewImage(cfg.ScreenWidth, cfg.ScreenHeight),
+		world:          w,
 		liveCellsImage: liveCell,
 		deadCellsImage: deadCell,
 		ScreenWidth:    cfg.ScreenWidth,
@@ -70,9 +75,7 @@ func (g *Game) Update() error {
 
 // render the scene. very fast
 func (g *Game) Draw(screen *ebiten.Image) {
-	g.world.Clear()
-
-	// TODO: draw on dead cells too
+	g.world.Fill(color.White)
 
 	// draw living cells to map.
 	for cell := range g.Scene.LivingCells {
@@ -83,18 +86,16 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	g.Camera.Render(g.world, screen)
 
-	// GUI
+	// GUI (debug)
 	worldX, worldY := g.Camera.ScreenToWorld(ebiten.CursorPosition())
 	ebitenutil.DebugPrintAt(
 		screen,
-		fmt.Sprintf("%s\nCursor World Pos: %.2f,%.2f",
-			g.Camera.String(),
-			worldX/10, worldY/10),
-		0, g.ScreenHeight-32,
+		fmt.Sprintf("x: %.2f, y: %.2f", worldX, worldY),
+		0, g.ScreenHeight-16,
 	)
 	ebitenutil.DebugPrint(
 		screen,
-		fmt.Sprintf("TPS: %0.2f\nSpeed: %v\nTick Number: %v\nLiving Cells: %v\n", ebiten.CurrentTPS(), g.Scene.Speed, g.Scene.Tick, len(g.Scene.LivingCells)),
+		fmt.Sprintf("TPS: %0.2f\nSpeed: %v\nLiving Cells: %v\n", ebiten.CurrentTPS(), g.Scene.Speed, len(g.Scene.LivingCells)),
 	)
 }
 
