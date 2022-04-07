@@ -1,6 +1,8 @@
 screen_width: 800
 screen_height: 600
 
+map_size: 1000
+
 to_keep_alive:
 - 2
 - 3

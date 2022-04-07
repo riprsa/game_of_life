@@ -6,10 +6,9 @@ I use Ebiten as game engine. Logic of Game of Life I implemented in Go by myself
 
 ## Features
 
-- [x] Game of Life Logic and cool moving cell creatures.
-- [x] Comfortable to place cells by pointer.
+- [x] Game of Life logic.
+- [x] Primitive cell editor by mouse.
 - [x] Pause, Play, Restart buttons and Speed control.
-- [ ] 
 
 ## Usage
 
@@ -21,4 +20,4 @@ WASD - to move camera
 QE - to zoom camera
 Escape - to pause/play
 12345 - to change speed
-R - to restart
+R - to restart scene

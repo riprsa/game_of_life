@@ -13,6 +13,8 @@ type Config struct {
 	ToKeepAlive   []int `yaml:"to_keep_alive"`
 	ToBecomeAlive []int `yaml:"to_become_alive"`
 
+	MapSize int `yaml:"map_size"`
+
 	TPS int `yaml:"TPS"`
 }
 
