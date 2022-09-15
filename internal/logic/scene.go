@@ -5,6 +5,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+// Entry point of the game. Saves everything about logic here.
 type Scene struct {
 	// Map is a 2D array of cells that are true. All other cells are false so we don't need to store them.
 	Map Map
@@ -26,6 +27,7 @@ type Scene struct {
 	tick int
 }
 
+// Creates new Scene from Config.
 func NewScene(cfg config.Config) Scene {
 	m := NewMap(cfg.MapSize, cfg.MapSize)
 

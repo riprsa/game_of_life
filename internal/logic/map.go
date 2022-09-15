@@ -1,9 +1,12 @@
 package logic
 
+// Cell is here or not
 type Map [][]bool
 
+// Just list of coords, to every use. TODO: rename to make it prettier.
 type ListOfCords []Cord
 
+// One point on the map.
 type Cord struct {
 	X int
 	Y int
@@ -19,6 +22,7 @@ func NewMap(width, height int) Map {
 	return m
 }
 
+// Get all alive cells around this point.
 func (m Map) GetLivingNeighbors(x, y int) ListOfCords {
 	neighbors := ListOfCords{
 		{X: x + 1, Y: y},
@@ -47,6 +51,7 @@ func (m Map) GetLivingNeighbors(x, y int) ListOfCords {
 	return livingNeighbors
 }
 
+// Get all dead cells around this point.
 func (m Map) GetDeadNeighbors(x, y int) ListOfCords {
 	neighbors := ListOfCords{
 		{X: x + 1, Y: y},
