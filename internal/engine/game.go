@@ -57,6 +57,7 @@ func NewGame(cfg config.Config) (*Game, error) {
 	}, nil
 }
 
+// it happens every TPS
 func (g *Game) Update() error {
 	// cell edition functionality
 	g.cellEditor()

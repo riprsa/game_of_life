@@ -75,6 +75,7 @@ func (g *Game) cellEditor() {
 
 		if int(worldX) < len(g.Scene.Map) && int(worldX) >= 0 && int(worldY) < len(g.Scene.Map[0]) && int(worldY) >= 0 {
 			g.Scene.Map[int(worldX)][int(worldY)] = true
+			// add to slice
 			g.Scene.LivingCells[logic.Cord{X: int(worldX), Y: int(worldY)}] = struct{}{}
 		}
 	}
