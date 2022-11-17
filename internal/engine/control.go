@@ -25,7 +25,7 @@ func (g *Game) gameplayControl() {
 	}
 
 	// pause
-	if inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
+	if inpututil.IsKeyJustPressed(ebiten.KeyEscape) || inpututil.IsKeyJustPressed(ebiten.KeySpace) {
 		if g.Scene.IsPaused {
 			g.Scene.IsPaused = false
 		} else {

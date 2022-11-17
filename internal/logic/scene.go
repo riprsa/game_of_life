@@ -10,7 +10,7 @@ type Scene struct {
 	// Map is a 2D array of cells that are true. All other cells are false so we don't need to store them.
 	Map Map
 
-	// LivingCells is map with all living cell. We use it fot logic and rendering.
+	// LivingCells is map with all living cell. We use it for logic and rendering.
 	LivingCells map[Cord]struct{}
 
 	// ToKeepAlive is a slice of the numbers of neighbors that a cell must have to stay alive.
